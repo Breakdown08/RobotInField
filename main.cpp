@@ -36,6 +36,27 @@ std::string CoordToString(TCoord& coord)
 	return result;
 }
 
+std::string KeyToString(TKey& key)
+{
+	std::string result;
+	switch (key)
+	{
+		case TKey::DOWN:
+			result = "Движение вниз";
+			break;
+		case TKey::UP:
+			result = "Движение вверх";
+			break;
+		case TKey::LEFT:
+			result = "Движение влево";
+			break;
+		case TKey::RIGHT:
+			result = "Движение вправо";
+			break;
+	}
+	return result;
+}
+
 class IllegalCommand
 {
 private:
@@ -53,7 +74,7 @@ private:
 	std::string m_error;
 	TCoord coord;
 public:
-	OffTheField(std::string stringCoord) : m_error("Не могу переместиться в координату " + stringCoord) { }
+	OffTheField(std::string stringOldCoord, std::string stringNewCoord, std::string stringDirection) : m_error(stringDirection +". Не могу переместиться в координату " + stringNewCoord + " из координаты " + stringOldCoord) { }
 	const char* getError()
 	{
 		return m_error.c_str();
@@ -190,7 +211,7 @@ void InitStep(TGame& g, TKey key)
 	}
 	if (newCoord.y > 9 || newCoord.y < 0 || newCoord.x > 9 || newCoord.x < 0)
 	{
-		throw OffTheField(CoordToString(newCoord));
+		throw OffTheField(CoordToString(coord), CoordToString(newCoord), KeyToString(key));
 	}
 	else
 	{
